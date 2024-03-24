@@ -12,12 +12,29 @@ fields = ["email","password","username","displayname"]
 @app.route("/register", methods= ["POST"])
 def register():
     user_data = json.loads(request.data)
-    email = user_data["email"]
-    # password = user_data["password"]
+
+    # check if every field exists
     for field in fields:
         if not field in user_data.keys():
-            print(f"{field} is empty.")
-    # print(strength_checker(password))
+           return jsonify({"message":f"{field} not found"}), 400
+
+    # variables
+    email = user_data["email"]
+    password = user_data["password"]
+    username = user_data["username"]
+    displayname = user_data["displayname"]
+
+    # email verify
+    isValidEmail = mail_verifier(email)
+    if not isValidEmail["status"]:
+        return jsonify({"message": isValidEmail["message"]}), 400
+
+    # username and display name verify
+    if(len(username)<3 or ' ' in username):
+        return jsonify({"message": "Invalid Username"}), 400
+    if(len(displayname)<3 or isspace(displayname)):
+        return jsonify({"message": "Invalid Display Name"}), 400
+
     return jsonify({"message":"User Registered Successfully"}), 200
 
 
