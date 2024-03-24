@@ -15,13 +15,13 @@ conn = psycopg2.connect(dbname="test",
                         host="localhost",
                         user="postgres",
                         password=os.getenv('DB_PASSWORD'),
-                        port="5432  ")
+                        port="5432")
 cursor = conn.cursor()
 
 # check if table is created
 cursor.execute("SELECT EXISTS(SELECT relname FROM pg_class WHERE relname = 'users' and relkind='r');")
 if(cursor.fetchone()[0] == False):
-    cursor.execute("CREATE TABLE users (username varchar(30), displayname varchar(30), email varchar, password varchar(64))")
+    cursor.execute("CREATE TABLE users (username varchar(30), displayname varchar(30), email varchar, password varchar)")
 conn.commit()
 
 
@@ -67,6 +67,10 @@ def register():
 
     # encrypt the password
     hashed = bcrypt.hashpw(bytes(password, 'utf-8'), bcrypt.gensalt())
+
+    # upload it to database
+    cursor.execute("INSERT INTO users (username,displayname,email,password) VALUES(%s,%s,%s,%s)",(username,displayname,email,hashed))
+    conn.commit()
 
     return jsonify({"message":"User Registered Successfully"}), 200
     
