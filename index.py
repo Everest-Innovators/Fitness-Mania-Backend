@@ -1,5 +1,9 @@
+import os
+from dotenv import load_dotenv
+import psycopg2
 import json
 from flask import Flask, jsonify, request
+import bcrypt
 
 app = Flask(__name__)
 
@@ -40,7 +44,11 @@ def register():
     if not isValidPassword["status"]:
         return jsonify({"message": isValidPassword["message"]}), 400
 
+    # encrypt the password
+    hashed = bcrypt.hashpw(bytes(password, 'utf-8'), bcrypt.gensalt())
+
     return jsonify({"message":"User Registered Successfully"}), 200
+    
 
 
 
