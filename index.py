@@ -8,14 +8,15 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 
-# ["email","password","username","displayname"]
+fields = ["email","password","username","displayname"]
 @app.route("/register", methods= ["POST"])
 def register():
     user_data = json.loads(request.data)
     email = user_data["email"]
     # password = user_data["password"]
-    if "password" and "email" in user_data.keys():
-        print("test")
+    for field in fields:
+        if not field in user_data.keys():
+            print(f"{field} is empty.")
     # print(strength_checker(password))
     return jsonify({"message":"User Registered Successfully"}), 200
 
