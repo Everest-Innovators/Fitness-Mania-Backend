@@ -9,6 +9,5 @@ def hello_world():
 
 @app.route("/register", methods= ["POST"])
 def register():
-    data = request.data
-    print(data)
+    user_data = request.get_json()
     return jsonify({"message":"User Registered Successfully"}), 200
