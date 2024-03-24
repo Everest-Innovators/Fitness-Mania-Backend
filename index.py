@@ -32,8 +32,13 @@ def register():
     # username and display name verify
     if(len(username)<3 or ' ' in username):
         return jsonify({"message": "Invalid Username"}), 400
-    if(len(displayname)<3 or isspace(displayname)):
+    if(len(displayname)<3 or displayname.isspace()):
         return jsonify({"message": "Invalid Display Name"}), 400
+
+    # password strength
+    isValidPassword = strength_checker(password)
+    if not isValidPassword["status"]:
+        return jsonify({"message": isValidPassword["message"]}), 400
 
     return jsonify({"message":"User Registered Successfully"}), 200
 
@@ -44,6 +49,8 @@ def strength_checker(password_to_check):
             return {"status":False, "message":"Your password should be at least 8 characters long."}
         if sum(1 for c in password_to_check if c.isupper()) <= 0:
              return {"status":False, "message":"Use at least one capital letters."}
+        if sum(1 for c in password_to_check if c.islower()) <= 0:
+             return {"status":False, "message":"Use at least one small letters."}
         if sum(1 for c in password_to_check if c.isdigit()) <=0:
             return {"status":False, "message":"Use at least one number"}
         return {"status":True}
