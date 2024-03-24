@@ -5,6 +5,27 @@ import json
 from flask import Flask, jsonify, request
 import bcrypt
 
+# environment secrets
+load_dotenv()
+
+
+
+# database connection
+conn = psycopg2.connect(dbname="test",
+                        host="localhost",
+                        user="postgres",
+                        password=os.getenv('DB_PASSWORD'),
+                        port="5432  ")
+cursor = conn.cursor()
+
+# check if table is created
+cursor.execute("SELECT EXISTS(SELECT relname FROM pg_class WHERE relname = 'users' and relkind='r');")
+if(cursor.fetchone()[0] == False):
+    cursor.execute("CREATE TABLE users (username varchar(30), displayname varchar(30), email varchar, password varchar(64))")
+conn.commit()
+
+
+# API
 app = Flask(__name__)
 
 @app.route("/")
@@ -34,9 +55,9 @@ def register():
         return jsonify({"message": isValidEmail["message"]}), 400
 
     # username and display name verify
-    if(len(username)<3 or ' ' in username):
+    if(len(username)<3 or len(username)>30 or ' ' in username):
         return jsonify({"message": "Invalid Username"}), 400
-    if(len(displayname)<3 or displayname.isspace()):
+    if(len(displayname)<3 or len(username)>30 or displayname.isspace()):
         return jsonify({"message": "Invalid Display Name"}), 400
 
     # password strength
@@ -50,11 +71,11 @@ def register():
     return jsonify({"message":"User Registered Successfully"}), 200
     
 
-
-
 def strength_checker(password_to_check):
         if len(password_to_check) < 8:
             return {"status":False, "message":"Your password should be at least 8 characters long."}
+        if len(password_to_check) >= 64:
+            return {"status":False, "message":"Your password should not be more than 64 characters long."}
         if sum(1 for c in password_to_check if c.isupper()) <= 0:
              return {"status":False, "message":"Use at least one capital letters."}
         if sum(1 for c in password_to_check if c.islower()) <= 0:
