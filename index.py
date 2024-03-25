@@ -2,8 +2,10 @@ import os
 from dotenv import load_dotenv
 import psycopg2
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Blueprint
 import bcrypt
+from blueprints.personal_info import body_measures
+from blueprints.personal_info import personalInfo_bp
 
 # environment secrets
 load_dotenv()
@@ -11,22 +13,23 @@ load_dotenv()
 
 
 # database connection
-conn = psycopg2.connect(dbname="test",
-                        host="localhost",
-                        user="postgres",
+conn = psycopg2.connect(dbname=os.getenv('DB_NAME'),
+                        host=os.getenv('DB_HOST'),
+                        user=os.getenv('DB_USER'),
                         password=os.getenv('DB_PASSWORD'),
-                        port="5432")
+                        port=os.getenv('DB_PORT'))
 cursor = conn.cursor()
 
 # check if table is created
 cursor.execute("SELECT EXISTS(SELECT relname FROM pg_class WHERE relname = 'users' and relkind='r');")
 if(cursor.fetchone()[0] == False):
-    cursor.execute("CREATE TABLE users (username varchar(30), displayname varchar(30), email varchar, password varchar)")
+    cursor.execute("CREATE TABLE users (id serial primary key, username varchar(30), displayname varchar(30), email varchar, password varchar)")
 conn.commit()
 
 
 # API
 app = Flask(__name__)
+app.register_blueprint(personalInfo_bp)
 
 @app.route("/")
 def hello_world():
