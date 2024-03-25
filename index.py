@@ -1,25 +1,14 @@
+# database connection
 import os
 from dotenv import load_dotenv
 import psycopg2
-import json
-from flask import Flask, jsonify, request, Blueprint
-import bcrypt
-from blueprints.personal_info import body_measures
-from blueprints.personal_info import personalInfo_bp
-
-# environment secrets
 load_dotenv()
-
-
-
-# database connection
 conn = psycopg2.connect(dbname=os.getenv('DB_NAME'),
                         host=os.getenv('DB_HOST'),
                         user=os.getenv('DB_USER'),
                         password=os.getenv('DB_PASSWORD'),
                         port=os.getenv('DB_PORT'))
 cursor = conn.cursor()
-
 # check if table is created
 cursor.execute("SELECT EXISTS(SELECT relname FROM pg_class WHERE relname = 'users' and relkind='r');")
 if(cursor.fetchone()[0] == False):
@@ -27,7 +16,14 @@ if(cursor.fetchone()[0] == False):
 conn.commit()
 
 
+
 # API
+import json
+from flask import Flask, jsonify, request, Blueprint
+import bcrypt
+from blueprints.personal_info import body_measures
+from blueprints.personal_info import personalInfo_bp
+
 app = Flask(__name__)
 app.register_blueprint(personalInfo_bp)
 
@@ -69,10 +65,11 @@ def register():
         return jsonify({"message": isValidPassword["message"]}), 400
 
     # encrypt the password
-    hashed = bcrypt.hashpw(bytes(password, 'utf-8'), bcrypt.gensalt())
+    hashed = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt(14))
+    
 
     # upload it to database
-    cursor.execute("INSERT INTO users (username,displayname,email,password) VALUES(%s,%s,%s,%s)",(username,displayname,email,hashed))
+    cursor.execute("INSERT INTO users (username,displayname,email,password) VALUES(%s,%s,%s,%s)",(username,displayname,email,hashed.decode('utf8')))
     conn.commit()
 
     return jsonify({"message":"User Registered Successfully"}), 200

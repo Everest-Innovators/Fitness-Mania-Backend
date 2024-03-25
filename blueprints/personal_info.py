@@ -1,23 +1,35 @@
 from flask import Flask, jsonify, request, Blueprint
 import json
+from index import cursor, conn
+import bcrypt
 
 personalInfo_bp = Blueprint('personal_info', __name__)
 
 @personalInfo_bp.route('/completeprofile', methods=["POST"])
 def body_measures():
-    fields = ["weight","height","age","experience"]
+    fields = ["id","password","weight","height","age","experience"]
     user_data = json.loads(request.data)
 
     for field in fields:
         if not field in user_data.keys():
            return jsonify({"message":f"{field} not found"}), 400
         
-    #variables
+    # variables
+    id = user_data["id"]
+    password = user_data["password"]
     weight = user_data["weight"]
     height = user_data["height"]
     age = user_data["age"]
     experience = user_data["experience"]
 
+    # fetch user and check password
+    cursor.execute("SELECT password FROM users WHERE id=%s",id)
+    hashedPass = cursor.fetchone()[0]
+    if not bcrypt.checkpw(password.encode('utf8'),hashedPass.encode('utf8')):
+        return jsonify({"message": "Authentication Failed"}), 400
+    
+
+    # data validation
     isValidWeight = is_valid_weight(weight)
     if not isValidWeight:
         return jsonify({"message": "Invalid Weight"}), 400
