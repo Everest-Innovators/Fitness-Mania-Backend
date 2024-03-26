@@ -12,7 +12,7 @@ cursor = conn.cursor()
 # check if table is created
 cursor.execute("SELECT EXISTS(SELECT relname FROM pg_class WHERE relname = 'users' and relkind='r');")
 if(cursor.fetchone()[0] == False):
-    cursor.execute("CREATE TABLE users (id serial primary key, username varchar(30), displayname varchar(30), email varchar, password varchar)")
+    cursor.execute("CREATE TABLE users (id serial primary key, username varchar(30), displayname varchar(30), email varchar, password varchar, weight float, height float, age int, experience int)")
 conn.commit()
 
 

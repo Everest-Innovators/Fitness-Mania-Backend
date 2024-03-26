@@ -44,7 +44,11 @@ def body_measures():
 
     isValidExperience = is_valid_experience(experience)
     if not isValidExperience:
-        return jsonify({"message": "Invalid Experience"}), 400    
+        return jsonify({"message": "Invalid Experience"}), 400   
+
+    # upload it to database
+    cursor.execute("INSERT INTO users (weight,height,age,experience) VALUES(%s,%s,%s,%s)",(weight,height,age,experience.decode('utf8')))
+    conn.commit() 
     
     return jsonify({"message":"Success"}), 200
 
