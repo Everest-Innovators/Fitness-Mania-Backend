@@ -23,9 +23,11 @@ from flask import Flask, jsonify, request, Blueprint
 import bcrypt
 from blueprints.personal_info import body_measures
 from blueprints.personal_info import personalInfo_bp
+from blueprints.create_post import createPost_bp
 
 app = Flask(__name__)
 app.register_blueprint(personalInfo_bp)
+app.register_blueprint(createPost_bp)
 
 @app.route("/")
 def hello_world():
