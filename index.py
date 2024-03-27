@@ -3,17 +3,17 @@ import os
 from dotenv import load_dotenv
 import psycopg2
 load_dotenv()
-conn = psycopg2.connect(dbname=os.getenv('DB_NAME'),
-                        host=os.getenv('DB_HOST'),
-                        user=os.getenv('DB_USER'),
-                        password=os.getenv('DB_PASSWORD'),
-                        port=os.getenv('DB_PORT'))
-cursor = conn.cursor()
-# check if table is created
-cursor.execute("SELECT EXISTS(SELECT relname FROM pg_class WHERE relname = 'users' and relkind='r');")
-if(cursor.fetchone()[0] == False):
-    cursor.execute("CREATE TABLE users (id serial primary key, username varchar(30), displayname varchar(30), email varchar, password varchar, weight float, height float, age int, experience int)")
-conn.commit()
+# conn = psycopg2.connect(dbname=os.getenv('DB_NAME'),
+#                         host=os.getenv('DB_HOST'),
+#                         user=os.getenv('DB_USER'),
+#                         password=os.getenv('DB_PASSWORD'),
+#                         port=os.getenv('DB_PORT'))
+# cursor = conn.cursor()
+# # check if table is created
+# cursor.execute("SELECT EXISTS(SELECT relname FROM pg_class WHERE relname = 'users' and relkind='r');")
+# if(cursor.fetchone()[0] == False):
+#     cursor.execute("CREATE TABLE users (id serial primary key, username varchar(30), displayname varchar(30), email varchar, password varchar, weight float, height float, age int, experience int)")
+# conn.commit()
 
 
 
@@ -71,8 +71,8 @@ def register():
     
 
     # upload it to database
-    cursor.execute("INSERT INTO users (username,displayname,email,password) VALUES(%s,%s,%s,%s)",(username,displayname,email,hashed.decode('utf8')))
-    conn.commit()
+    # cursor.execute("INSERT INTO users (username,displayname,email,password) VALUES(%s,%s,%s,%s)",(username,displayname,email,hashed.decode('utf8')))
+    # conn.commit()
 
     return jsonify({"message":"User Registered Successfully"}), 200
     
