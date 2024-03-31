@@ -31,6 +31,10 @@ def post():
 def textChecker(title, body):
     if len(title) < 10 or title.isspace():
         return {"status":False, "message":"Your title is too short. Write at least 10 letters."}
+    if len(title) > 30:
+        return {"status":False, "message":"Your title is too long."}
+    if len(body) > 10000:
+        return {"status":False, "message":"Your body is too long."}
     if len(body) < 3 or body.isspace():
         return {"status":False, "message":"Your body is too short. Write at least 3 letters."}
     return {"status":True}

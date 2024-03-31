@@ -31,4 +31,6 @@ def comment():
 def textChecker(body):
     if len(body) < 3 or body.isspace():
         return {"status":False, "message":"Your comment is too short. Write at least 3 letters."}
+    if len(body) > 10000:
+        return {"status":False, "message":"Your comment is too long."}
     return {"status":True}
