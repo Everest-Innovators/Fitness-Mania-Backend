@@ -1,20 +1,21 @@
-from flask import Flask, jsonify, request, Blueprint
+# views.py
+from flask import jsonify, request, Blueprint
 import json
-# from index import cursor, conn
+from .models import save_user_data_to_db
 import bcrypt
+from database import cursor, conn
 
 personalInfo_bp = Blueprint('personal_info', __name__)
 
 @personalInfo_bp.route('/completeprofile', methods=["POST"])
 def body_measures():
-    fields = ["id","password","weight","height","age","experience"]
+    fields = ["id", "password", "weight", "height", "age", "experience"]
     user_data = json.loads(request.data)
 
     for field in fields:
-        if not field in user_data.keys():
-           return jsonify({"message":f"{field} not found"}), 400
-        
-    # variables
+        if field not in user_data.keys():
+           return jsonify({"message": f"{field} not found"}), 400
+
     id = user_data["id"]
     password = user_data["password"]
     weight = user_data["weight"]
@@ -22,35 +23,30 @@ def body_measures():
     age = user_data["age"]
     experience = user_data["experience"]
 
-    # fetch user and check password
-    # cursor.execute("SELECT password FROM users WHERE id=%s",id)
-    # hashedPass = cursor.fetchone()[0]
-    # if not bcrypt.checkpw(password.encode('utf8'),hashedPass.encode('utf8')):
-    #     return jsonify({"message": "Authentication Failed"}), 400
-    
+    # Example user authentication
+    cursor.execute("SELECT password FROM users WHERE id = %s", (id,))
+    hashedPass = cursor.fetchone()[0]
+    if not bcrypt.checkpw(password.encode('utf8'),hashedPass.encode('utf8')):
+        return jsonify({"message": "Authentication Failed"}), 400
 
-    # data validation
-    isValidWeight = is_valid_weight(weight)
-    if not isValidWeight:
+    # Validations
+    if not is_valid_weight(weight):
         return jsonify({"message": "Invalid Weight"}), 400
 
-    isValidHeight = is_valid_height(height)
-    if not isValidHeight:
+    if not is_valid_height(height):
         return jsonify({"message": "Invalid Height"}), 400
     
-    isValidAge = is_valid_age(age)
-    if not isValidAge:
+    if not is_valid_age(age):
         return jsonify({"message": "Invalid Age"}), 400
 
-    isValidExperience = is_valid_experience(experience)
-    if not isValidExperience:
+    if not is_valid_experience(experience):
         return jsonify({"message": "Invalid Experience"}), 400   
 
-    # upload it to database
-    # cursor.execute("INSERT INTO users (weight,height,age,experience) VALUES(%s,%s,%s,%s)",(weight,height,age,experience.decode('utf8')))
-    # conn.commit() 
+    # Save data to database
+    save_user_data_to_db(weight, height, age, experience, id)
     
-    return jsonify({"message":"Success"}), 200
+    return jsonify({"message": "Success"}), 200
+
 
 def is_valid_weight(weight_str):
     try:
