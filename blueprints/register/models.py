@@ -4,8 +4,9 @@ import bcrypt
 def register_user(username, displayname, email, password):
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(14))
 
-    cursor.execute('DROP TABLE IF EXISTS users;')
-    cursor.execute('CREATE TABLE users ('
+    cursor.execute("SELECT EXISTS(SELECT relname FROM pg_class WHERE relname = 'users' and relkind='r');")
+    if(cursor.fetchone()[0] == False):
+        cursor.execute('CREATE TABLE users ('
                'id SERIAL PRIMARY KEY,'
                'username VARCHAR NOT NULL,'
                'displayname VARCHAR NOT NULL,'
