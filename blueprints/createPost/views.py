@@ -1,5 +1,6 @@
 from flask import jsonify, request, Blueprint
 import json
+from psycopg2 import errors as psycopg2_errors
 from .models import save_post_to_db
 
 createPost_bp = Blueprint('create_post', __name__)
@@ -20,8 +21,12 @@ def post():
     if not isTextValid["status"]:
         return jsonify({"message": isTextValid["message"]}), 400
 
-    save_post_to_db(id, title, body, media_data)
-    return jsonify({"message": "Post Created Successfully"}), 200
+    
+    try:
+        save_post_to_db(id, title, body, media_data)
+        return jsonify({"message": "Post Created Successfully"}), 200
+    except psycopg2_errors.ForeignKeyViolation as e:
+        return jsonify({"message": "Invalid user ID or post ID"}), 400
 
 def textChecker(title, body):
     if len(title) < 10 or title.isspace():

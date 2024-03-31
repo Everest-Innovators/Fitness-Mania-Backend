@@ -9,7 +9,8 @@ def save_post_to_db(id, title, body, media):
                'id INTEGER REFERENCES users(id),'
                'title VARCHAR NOT NULL,'
                'body VARCHAR NOT NULL,'
-               'media VARCHAR[]'
+               'media VARCHAR[],'
+               'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
                 ')'
                )
         
