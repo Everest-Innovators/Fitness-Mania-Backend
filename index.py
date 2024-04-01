@@ -4,6 +4,7 @@ from blueprints.register.views import register_bp
 from blueprints.createPost.views import createPost_bp
 from blueprints.createComment.views import createComment_bp
 from blueprints.reactions.views import react_bp
+from blueprints.feed.views import feed_bp
 
 # API
 app = Flask(__name__)
@@ -12,6 +13,7 @@ app.register_blueprint(personalInfo_bp)
 app.register_blueprint(createPost_bp)
 app.register_blueprint(createComment_bp)
 app.register_blueprint(react_bp)
+app.register_blueprint(feed_bp)
 
 @app.route("/")
 def hello_world():
