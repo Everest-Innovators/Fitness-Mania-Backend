@@ -7,6 +7,7 @@ from blueprints.createComment.views import createComment_bp
 from blueprints.reactions.views import react_bp
 from blueprints.feed.views import feed_bp
 from blueprints.validUser.views import validuser_bp
+from blueprints.login.views import login_bp
 
 
 # API
@@ -23,6 +24,7 @@ app.register_blueprint(createComment_bp)
 app.register_blueprint(react_bp)
 app.register_blueprint(feed_bp)
 app.register_blueprint(validuser_bp)
+app.register_blueprint(login_bp)
 
 @app.route("/")
 @cross_origin()
