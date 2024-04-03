@@ -39,8 +39,8 @@ def register():
         return jsonify({"message": is_valid_password["message"]}), 400
 
     # Register user
-    register_user(username, displayname, email, password)
-    return jsonify({"message": "User Registered Successfully"}), 200
+    id = register_user(username, displayname, email, password)
+    return jsonify({"message": "User Registered Successfully", "id": id}), 200
 
 
 def strength_checker(password_to_check):
