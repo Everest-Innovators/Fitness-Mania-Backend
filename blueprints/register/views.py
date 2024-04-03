@@ -57,8 +57,8 @@ def strength_checker(password_to_check):
         return {"status":True}
 
 def mail_verifier(email_to_verify):
-     if sum(1 for c in email_to_verify if c=='@') != 1:
+     if sum(1 for c in email_to_verify if c=='@') < 1:
          return {"status":False, "message":"Invalid Email"}
-     if sum(1 for c in email_to_verify if c=='.') != 1:
+     if sum(1 for c in email_to_verify if c=='.') < 1:
          return {"status":False, "message":"Invalid Email"}
      return {"status":True}
