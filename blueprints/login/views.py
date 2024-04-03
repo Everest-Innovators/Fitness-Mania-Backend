@@ -19,7 +19,7 @@ def register():
     
     email = user_data["email"]
     password = user_data["password"]
-    id = fetch_user(id,password)
+    id = fetch_user(password,email)
     if id:
         return jsonify({"message":"Logged In", "id": id}), 200
     else:
