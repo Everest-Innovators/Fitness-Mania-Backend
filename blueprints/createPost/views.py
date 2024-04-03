@@ -24,7 +24,7 @@ def post():
     cursor.execute("SELECT password FROM users WHERE id = %s", (id,))
     hashedPass = cursor.fetchone()[0]
     if not bcrypt.checkpw(password.encode('utf8'),hashedPass.encode('utf8')):
-        return jsonify({"message": "Authentication Failed"}), 400
+        return jsonify({"message": "Authentication Failed"}), 401
 
     isTextValid = textChecker(title, body)
     if not isTextValid["status"]:
