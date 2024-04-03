@@ -6,6 +6,9 @@ register_bp = Blueprint('register', __name__)
 
 @register_bp.route("/register", methods=["POST"])
 def register():
+    if(not request.data):
+        return jsonify({"message": "data not found"}), 400
+
     fields = ["email", "password", "username", "displayname"]
     user_data = json.loads(request.data)
 
