@@ -8,9 +8,9 @@ def register_user(username, displayname, email, password):
     if(cursor.fetchone()[0] == False):
         cursor.execute('CREATE TABLE users ('
                'id SERIAL PRIMARY KEY,'
-               'username VARCHAR NOT NULL,'
+               'username VARCHAR NOT NULL UNIQUE,'
                'displayname VARCHAR NOT NULL,'
-               'email VARCHAR NOT NULL,'
+               'email VARCHAR NOT NULL UNIQUE,'
                'password VARCHAR NOT NULL,'
                'weight FLOAT DEFAULT 0.0,'
                'height FLOAT DEFAULT 0.0,'

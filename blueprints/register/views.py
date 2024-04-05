@@ -1,6 +1,7 @@
 from flask import jsonify, request, Blueprint
 import json
 from .models import register_user
+from psycopg2 import IntegrityError
 
 register_bp = Blueprint('register', __name__)
 
@@ -39,8 +40,11 @@ def register():
         return jsonify({"message": is_valid_password["message"]}), 400
 
     # Register user
-    id = register_user(username, displayname, email, password)
-    return jsonify({"message": "User Registered Successfully", "id": id}), 200
+    try:
+        id = register_user(username, displayname, email, password)
+        return jsonify({"message": "User Registered Successfully", "id": id}), 200
+    except IntegrityError as e:
+        return jsonify({"message": "The email or username isn't unique"}), 400
 
 
 def strength_checker(password_to_check):
