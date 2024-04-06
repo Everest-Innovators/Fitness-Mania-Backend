@@ -8,7 +8,7 @@ feed_bp = Blueprint('feed', __name__)
 def latest_posts():
     posts = []
 
-    cursor.execute("SELECT post_id FROM posts ORDER BY created_at DESC")
+    cursor.execute("SELECT * FROM posts ORDER BY created_at DESC")
 
     post = cursor.fetchall()
     for p in post:
@@ -19,7 +19,7 @@ def latest_posts():
 @feed_bp.route('/top', methods=["GET"])
 def top_posts():
     posts = []
-    cursor.execute("SELECT post_id FROM posts ORDER BY engagement DESC")
+    cursor.execute("SELECT * FROM posts ORDER BY engagement DESC")
 
     post = cursor.fetchall()
 
