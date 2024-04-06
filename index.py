@@ -9,6 +9,7 @@ from blueprints.feed.views import feed_bp
 from blueprints.validUser.views import validuser_bp
 from blueprints.login.views import login_bp
 from blueprints.getuser.views import getuser_bp
+from blueprints.getpost.views import getpost_bp
 
 
 # API
@@ -27,6 +28,7 @@ app.register_blueprint(feed_bp)
 app.register_blueprint(validuser_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(getuser_bp)
+app.register_blueprint(getpost_bp)
 
 @app.route("/")
 @cross_origin()
