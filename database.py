@@ -34,7 +34,7 @@ if(cursor.fetchone()[0] == False):
         'title VARCHAR NOT NULL,'
         'body VARCHAR NOT NULL,'
         'media VARCHAR[],'
-        'created_at TIMESTAMP with TIMEZONE DEFAULT CURRENT_TIMESTAMP with TIMEZONE,'
+        'created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,'
          'likers INTEGER[],'
          'dislikers INTEGER[],'
          'comments INTEGER[],'
@@ -50,6 +50,6 @@ if(cursor.fetchone()[0] == False):
                'post_id INTEGER REFERENCES posts(post_id),'
                'parent_comment_id INTEGER REFERENCES comments(comment_id),'
                'body VARCHAR NOT NULL,'
-               'created_at TIMESTAMP with TIMEZONE DEFAULT CURRENT_TIMESTAMP with TIMEZONE'
+               'created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP'
                 ')'
                )
