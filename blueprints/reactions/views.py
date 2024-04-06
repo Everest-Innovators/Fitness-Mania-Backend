@@ -7,6 +7,7 @@ react_bp = Blueprint('react', __name__)
 @react_bp.route('/post/<int:post_id>/like', methods=['POST'])
 def like_post(post_id):
     user_id = request.json.get('id')  # Check if user already liked the post
+    user_id = int(user_id)
     cursor.execute("SELECT likers FROM posts WHERE post_id = %s", (post_id,))
     likers_row = cursor.fetchone()
     if likers_row:
@@ -45,6 +46,7 @@ def like_post(post_id):
 @react_bp.route('/post/<int:post_id>/dislike', methods=['POST'])
 def dislike_post(post_id):
     user_id = request.json.get('id')
+    user_id = int(user_id)
 
     # Check if user already disliked the post
     cursor.execute("SELECT dislikers FROM posts WHERE post_id = %s", (post_id,))
