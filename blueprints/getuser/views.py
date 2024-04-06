@@ -8,9 +8,9 @@ getuser_bp = Blueprint('getuser', __name__)
 def getuser(id):
     posts = []
 
-    cursor.execute("SELECT username FROM users WHERE id=%s",(id))
+    cursor.execute("SELECT username FROM users WHERE id=%s",(id,))
 
-    user =  cursor.fetchone
+    user =  cursor.fetchone()
     if(user):
         return jsonify(user), 200
     else:
