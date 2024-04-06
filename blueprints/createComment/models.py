@@ -10,7 +10,7 @@ def save_comment_to_db(id, post_id, body, parent_comment_id=None):
                'post_id INTEGER REFERENCES posts(post_id),'
                'parent_comment_id INTEGER REFERENCES comments(comment_id),'
                'body VARCHAR NOT NULL,'
-               'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+               'created_at TIMESTAMP with TIMEZONE DEFAULT CURRENT_TIMESTAMP with TIMEZONE'
                 ')'
                )
     

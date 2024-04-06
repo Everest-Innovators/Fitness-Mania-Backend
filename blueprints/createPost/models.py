@@ -10,7 +10,7 @@ def save_post_to_db(id, title, body, media):
                'title VARCHAR NOT NULL,'
                'body VARCHAR NOT NULL,'
                'media VARCHAR[],'
-               'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,'
+               'created_at TIMESTAMP with TIMEZONE DEFAULT CURRENT_TIMESTAMP with TIMEZONE,'
                 'likers INTEGER[],'
                 'dislikers INTEGER[],'
                 'comments INTEGER[],'

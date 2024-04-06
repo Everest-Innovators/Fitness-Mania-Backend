@@ -5,7 +5,7 @@ from database import conn, cursor
 getpost_bp = Blueprint('getpost', __name__)
 
 @getpost_bp.route('/getpost/<int:id>', methods=["GET"])
-def getuser(id):
+def getpost(id):
 
     cursor.execute("SELECT * FROM posts WHERE post_id=%s",(id,))
 
@@ -13,4 +13,4 @@ def getuser(id):
     if(post):
         return jsonify(post), 200
     else:
-        return jsonify({"message":"Invalid user"}), 400
+        return jsonify({"message":"Invalid Post"}), 400
